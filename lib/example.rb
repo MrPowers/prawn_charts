@@ -7,5 +7,9 @@ graph_width = 300
 bounding_x = 100
 bounding_y = 600
 
-p = PrawnCharts::Main.new(scale, input_data, graph_height, graph_width, bounding_x, bounding_y)
-p.draw_graph
+#p = PrawnCharts::Main.new(scale, input_data, graph_height, graph_width, bounding_x, bounding_y)
+#p.draw_graph
+
+chart = PrawnCharts::PdfData.new(scale, input_data, graph_height, graph_width)
+p chart.y_pdf_data.y_increment
+
