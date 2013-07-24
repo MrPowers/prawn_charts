@@ -5,6 +5,9 @@ require_relative "linear_y_pdf_data_collector"
 require_relative "pdf_data_collector"
 require_relative "x_pdf_data_collector"
 require_relative "create_pdf_document"
+require_relative "log_y_pdf_data_collector"
+require_relative "log_pdf_data_collector"
+require_relative "create_log_pdf_document"
 
 module PrawnCharts
 end
