@@ -6,12 +6,12 @@ class LogYPdfDataCollector
     @y_labels = y_labels
   end
 
-  def y_label_increment_pdf
+  def pdf_points_per_unit
     graph_height_pdf.to_f / (y_labels.count - 1)
   end
 
   def collect
-    input_data.inject([]) { |memo, (_, y_units)| memo << (Math.log10(y_units) * y_label_increment_pdf); memo }
+    input_data.inject([]) { |memo, (_, y_units)| memo << (Math.log10(y_units) * pdf_points_per_unit); memo }
   end
 end
 
