@@ -16,17 +16,36 @@ require_relative "prawn_charts"
 
 
 # log example
-input_data = [["Jan 11", 5], ["Feb 11", 900], ["Mar 11", 800_000], ["Apr 11", 55], ["May 11", 9_000_000], ["June 11", 40]]
+input_data = [["Feb 11", 900], ["Mar 11", 800_000], ["Apr 11", nil], ["May 11", 9_000_000], ["June 11", 40]]
 scale = :log
 graph_height_pdf = 400
 graph_width_pdf = 400
 dot_radius = 4
+x_label_vertical_offset = 25
+x_label_width = 50
+x_label_height = 30
+x_label_text_box_options = { width: 50, height: x_label_height, overflow: :shrink_to_fit, align: :center }
+
 y_labels = [0, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000]
-x_label_options = { vertical_offset: 25, label_width: 50 }
+y_label_height = 30
+y_label_options = { width: 70, height: y_label_height, align: :right, valign: :center }
+y_label_horizontal_offset = 90
+
 
 pdf = Prawn::Document.new
-pdf.bounding_box([0, pdf.cursor], :width => graph_width_pdf, :height => graph_height_pdf) do
+pdf.bounding_box([50, pdf.cursor], :width => graph_width_pdf, :height => graph_height_pdf) do
   pdf.stroke_bounds
-  CreatePdfDocument.new(pdf, scale, input_data, graph_width_pdf, graph_height_pdf, dot_radius, y_labels, x_label_options).run
+
+  pdf_data = PdfDataCollector.new(scale, input_data, graph_width_pdf, graph_height_pdf, y_labels).collect
+  DrawChart.new(pdf_data, dot_radius).draw_line_and_dots(pdf)
+
+  x_label_data = XLabelsDataCollector.new(input_data, graph_width_pdf, x_label_vertical_offset, x_label_width).collect
+  DrawLabels.new(x_label_data, x_label_text_box_options).draw_labels(pdf)
+
+  y_label_data = YLabelsDataCollector.new(y_labels, graph_height_pdf, y_label_horizontal_offset, y_label_height).collect
+  DrawLabels.new(y_label_data, y_label_options).draw_labels(pdf)
+
+  horizontal_lines_data = HorizontalLinesDataCollector.new(graph_height_pdf, y_labels).collect
+  DrawHorizontalLines.new(horizontal_lines_data).run(pdf)
 end
 pdf.render_file(Dir.home + "/desktop/log_prawn_graph.pdf")

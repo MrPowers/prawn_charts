@@ -11,13 +11,9 @@ class LogYPdfDataCollector
   end
 
   def collect
-    input_data.inject([]) { |memo, (_, y_units)| memo << (Math.log10(y_units) * pdf_points_per_unit); memo }
+    input_data.inject([]) do |memo, (_, y_units)|
+      result = y_units.nil? ? nil : (Math.log10(y_units) * pdf_points_per_unit)
+      memo << result
+    end
   end
 end
-
-#input_data = [["Jan 11", 5], ["Feb 11", 900], ["Mar 11", 800_000]]
-#graph_height_pdf = 60
-#y_labels = [0, 10, 100, 1_000, 10_000, 100_000, 1_000_000]
-#y = LogYDataCollector.new(input_data, graph_height_pdf, y_labels)
-#p y.y_label_increment_pdf
-#p y.collect

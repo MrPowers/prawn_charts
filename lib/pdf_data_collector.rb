@@ -9,7 +9,7 @@ class PdfDataCollector
   end
 
   def collect
-    x_pdf_data.zip(y_pdf_data)
+    x_pdf_data.zip(y_pdf_data).select { |x, y| [x, y] unless y.nil? }
   end
 
   private
