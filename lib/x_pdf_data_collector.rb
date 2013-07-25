@@ -4,11 +4,11 @@ class XPdfDataCollector
     @graph_width_pdf = graph_width_pdf
   end
 
-  def x_label_increment_pdf
+  def pdf_points_per_unit
     @graph_width_pdf.to_f / (@input_data.length - 1)
   end
 
   def collect
-    0.step(@graph_width_pdf, x_label_increment_pdf).to_a
+    0.step(@graph_width_pdf, pdf_points_per_unit).to_a
   end
 end

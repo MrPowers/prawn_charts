@@ -8,6 +8,12 @@ class PdfDataCollector
     @y_labels = y_labels
   end
 
+  def collect
+    x_pdf_data.zip(y_pdf_data)
+  end
+
+  private
+
   def x_pdf_data
     XPdfDataCollector.new(input_data, graph_width_pdf).collect
   end
@@ -15,12 +21,10 @@ class PdfDataCollector
   def y_pdf_data
     if scale == :linear
       LinearYPdfDataCollector.new(input_data, graph_height_pdf, y_labels).collect
-    else
+    elsif scale == :log
       LogYPdfDataCollector.new(input_data, graph_height_pdf, y_labels).collect
+    else
+      raise("Scale must be :linear or :log")
     end
-  end
-
-  def collect
-    x_pdf_data.zip(y_pdf_data)
   end
 end
