@@ -3,9 +3,10 @@ dependencies other than Prawn, so this library is perfect for generating
 vector images with small file sizes.
 
 Todo:
-Allow horizontal lines to be drawn at the y label points
- - Call the log_y_pdf_data_collector or linear_y_pdf_data_collector
- - Draw line from [0, y] to [graph_width, y]
+1. Review how everything is collected and see if code can be reorganized
+2. Make data_collector and renderer directories so the code organization
+is clearer.
+
 
 
 2. Make functions extend from Prawn, so you can write pdf.draw_chart,
