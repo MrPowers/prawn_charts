@@ -8,12 +8,6 @@ describe LinearYPdfDataCollector do
     @linear_y_pdf_data_collector = LinearYPdfDataCollector.new(input_data, graph_height_pdf, y_labels)
   end
 
-  context "#pdf_points_per_unit" do
-    it "returns the pdf points in a unit" do
-      expect(@linear_y_pdf_data_collector.pdf_points_per_unit).to eq(10)
-    end
-  end
-
   context "#collect" do
     it "returns an array of y values in pdf points" do
       expected = [50, 20, 120]

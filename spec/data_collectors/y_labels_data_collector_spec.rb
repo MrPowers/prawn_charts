@@ -5,7 +5,8 @@ describe YLabelsDataCollector do
     y_labels = [0, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000]
     graph_height_pdf = 400
     horizontal_offset = 20
-    @y_data_collector = YLabelsDataCollector.new(y_labels, graph_height_pdf, horizontal_offset)
+    label_height = 20
+    @y_data_collector = YLabelsDataCollector.new(y_labels, graph_height_pdf, horizontal_offset, label_height)
   end
 
   context "#y_label_increment" do
