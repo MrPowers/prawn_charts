@@ -1,4 +1,4 @@
-require_relative "prawn_charts"
+require_relative "./../prawn_charts"
 
 # log example
 input_data = [["Feb 11", 900], ["Mar 11", 800_000], ["Apr 11", nil], ["May 11", 9_000_000], ["June 11", 40]]
