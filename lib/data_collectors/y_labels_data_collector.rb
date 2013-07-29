@@ -15,9 +15,13 @@ class YLabelsDataCollector
     graph_height_pdf.to_f / (y_labels.count - 1)
   end
 
+  def number_to_string_with_commas(number)
+    number.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse
+  end
+
   def collect
     y_labels.map.with_index do |y_label, index|
-      y_label = y_label.to_s
+      y_label = number_to_string_with_commas(y_label)
       x_pdf = -horizontal_offset
       y_pdf = index * y_label_increment + vertical_offset
       [y_label, [x_pdf, y_pdf]]

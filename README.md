@@ -37,4 +37,4 @@ end
 ```
 
 There are separate methods to draw_chart(), draw_dots(), draw_labels(),
-and draw_horizontal_lines(), so the charts can be cusomized.
+and draw_horizontal_lines(), so the charts can be customized.
