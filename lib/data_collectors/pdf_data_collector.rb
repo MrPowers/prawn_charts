@@ -19,12 +19,6 @@ class PdfDataCollector
   end
 
   def y_pdf_data
-    if scale == :linear
-      LinearYPdfDataCollector.new(input_data, graph_height_pdf, y_labels).collect
-    elsif scale == :log
-      LogYPdfDataCollector.new(input_data, graph_height_pdf, y_labels).collect
-    else
-      raise("Scale must be :linear or :log")
-    end
+    YPdfDataCollector.new(scale, input_data, graph_height_pdf, y_labels).collect
   end
 end
