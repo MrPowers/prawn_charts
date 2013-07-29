@@ -4,10 +4,6 @@ vector images with small file sizes.
 
 Todo:
 1. Review how everything is collected and see if code can be reorganized
-2. Make data_collector and renderer directories so the code organization
-is clearer.
-
-
 
 2. Make functions extend from Prawn, so you can write pdf.draw_chart,
 etc.

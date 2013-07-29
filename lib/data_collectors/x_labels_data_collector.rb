@@ -12,7 +12,11 @@ class XLabelsDataCollector
   end
 
   def collect
-    input_data.map.with_index { |(x, _), index| [x, [x_pdf_data[index] - horizontal_offset, -(vertical_offset)]] }
+    input_data.map.with_index do |(label, _), index|
+      x_pdf = x_pdf_data[index] - horizontal_offset
+      y_pdf = -(vertical_offset)
+      [label, [x_pdf, y_pdf] ]
+    end
   end
 
   private

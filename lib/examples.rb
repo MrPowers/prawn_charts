@@ -22,13 +22,13 @@ graph_height_pdf = 400
 graph_width_pdf = 400
 dot_radius = 4
 x_label_vertical_offset = 25
-x_label_width = 50
+x_label_width = 40
 x_label_height = 30
 x_label_text_box_options = { width: 50, height: x_label_height, overflow: :shrink_to_fit, align: :center }
 
 y_labels = [0, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000]
 y_label_height = 30
-y_label_options = { width: 70, height: y_label_height, align: :right, valign: :center }
+y_label_text_box_options = { width: 70, height: y_label_height, align: :right, valign: :center }
 y_label_horizontal_offset = 90
 
 
@@ -37,15 +37,16 @@ pdf.bounding_box([50, pdf.cursor], :width => graph_width_pdf, :height => graph_h
   pdf.stroke_bounds
 
   pdf_data = PdfDataCollector.new(scale, input_data, graph_width_pdf, graph_height_pdf, y_labels).collect
-  DrawChart.new(pdf_data, dot_radius).draw_line_and_dots(pdf)
+  ChartRenderer.new(pdf_data).draw(pdf)
+  DotRenderer.new(pdf_data, dot_radius).draw(pdf)
 
   x_label_data = XLabelsDataCollector.new(input_data, graph_width_pdf, x_label_vertical_offset, x_label_width).collect
-  DrawLabels.new(x_label_data, x_label_text_box_options).draw_labels(pdf)
+  LabelRenderer.new(x_label_data, x_label_text_box_options).draw(pdf)
 
   y_label_data = YLabelsDataCollector.new(y_labels, graph_height_pdf, y_label_horizontal_offset, y_label_height).collect
-  DrawLabels.new(y_label_data, y_label_options).draw_labels(pdf)
+  LabelRenderer.new(y_label_data, y_label_text_box_options).draw(pdf)
 
   horizontal_lines_data = HorizontalLinesDataCollector.new(graph_height_pdf, y_labels).collect
-  DrawHorizontalLines.new(horizontal_lines_data).run(pdf)
+  HorizontalLinesRenderer.new(horizontal_lines_data).draw(pdf)
 end
 pdf.render_file(Dir.home + "/desktop/log_prawn_graph.pdf")
