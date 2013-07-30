@@ -1,10 +1,11 @@
 class YLabelsDataCollector
-  attr_reader :y_labels, :graph_height_pdf, :horizontal_offset, :label_height
-  def initialize(y_labels, graph_height_pdf, horizontal_offset, label_height)
+  attr_reader :y_labels, :graph_height_pdf, :label_width, :label_height, :y_label_offset
+  def initialize(y_labels, graph_height_pdf, label_width, label_height, y_label_offset)
     @y_labels = y_labels
     @graph_height_pdf = graph_height_pdf
-    @horizontal_offset = horizontal_offset
+    @label_width = label_width
     @label_height = label_height
+    @y_label_offset = y_label_offset
   end
 
   def vertical_offset
@@ -22,7 +23,7 @@ class YLabelsDataCollector
   def collect
     y_labels.map.with_index do |y_label, index|
       y_label = number_to_string_with_commas(y_label)
-      x_pdf = -horizontal_offset
+      x_pdf = -label_width - y_label_offset
       y_pdf = index * y_label_increment + vertical_offset
       [y_label, [x_pdf, y_pdf]]
     end

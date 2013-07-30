@@ -1,9 +1,9 @@
 class XLabelsDataCollector
-  attr_reader :input_data, :graph_width_pdf, :vertical_offset, :label_width
-  def initialize(input_data, graph_width_pdf, vertical_offset, label_width)
+  attr_reader :input_data, :graph_width_pdf, :label_height, :label_width
+  def initialize(input_data, graph_width_pdf, label_height, label_width)
     @input_data = input_data
     @graph_width_pdf = graph_width_pdf
-    @vertical_offset = vertical_offset
+    @label_height = label_height
     @label_width = label_width
   end
 
@@ -14,7 +14,7 @@ class XLabelsDataCollector
   def collect
     input_data.map.with_index do |(label, _), index|
       x_pdf = x_pdf_data[index] - horizontal_offset
-      y_pdf = -(vertical_offset)
+      y_pdf = -(label_height)
       [label, [x_pdf, y_pdf] ]
     end
   end

@@ -20,23 +20,23 @@ graph_height_pdf = 200
 graph_width_pdf = graph_height_pdf * 1.7
 dot_radius = 4
 
-x_label_vertical_offset = 35
 x_label_width = 50
-x_label_height = 30
+x_label_height = 35
 x_label_text_box_options = { overflow: :shrink_to_fit, align: :center, rotate: 45 }
 
 y_labels = [0, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000]
 y_label_height = 30
-y_label_width = 70
+y_label_width = 65
+y_label_offset = 10
 y_label_text_box_options = { align: :right, valign: :center }
-y_label_horizontal_offset = 80
 
 container_x_padding = 20
 container_y_padding = 20
-container_width = container_x_padding * 2 + x_label_width + graph_width_pdf
-container_height = container_y_padding * 2 + y_label_height + graph_height_pdf
+container_data_collector = ContainerDataCollector.new(graph_height_pdf, graph_width_pdf, container_x_padding, y_label_width, y_label_offset, container_y_padding, x_label_height)
+container_width = container_data_collector.width
+container_height = container_data_collector.height
 
-graph_top_left = [(container_x_padding + x_label_width), (container_y_padding + y_label_height + graph_height_pdf)]
+graph_top_left = container_data_collector.graph_top_left_corner
 
 orange = "D95D2E"
 green = "62C545"
@@ -60,10 +60,10 @@ pdf.bounding_box([0, pdf.cursor], :width => container_width, :height => containe
     pdf.draw_chart(pdf_data, green)
     pdf.draw_dots(pdf_data, dot_radius, orange)
 
-    x_label_data = XLabelsDataCollector.new(input_data, graph_width_pdf, x_label_vertical_offset, x_label_width).collect
+    x_label_data = XLabelsDataCollector.new(input_data, graph_width_pdf, x_label_height, x_label_width).collect
     pdf.draw_labels(x_label_data, x_label_width, x_label_height, x_label_text_box_options)
 
-    y_label_data = YLabelsDataCollector.new(y_labels, graph_height_pdf, y_label_horizontal_offset, y_label_height).collect
+    y_label_data = YLabelsDataCollector.new(y_labels, graph_height_pdf, y_label_width, y_label_height, y_label_offset).collect
     pdf.draw_labels(y_label_data, y_label_width, y_label_height, y_label_text_box_options)
 
     horizontal_lines_data = HorizontalLinesDataCollector.new(graph_height_pdf, graph_width_pdf, y_labels).collect
