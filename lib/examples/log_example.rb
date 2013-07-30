@@ -20,10 +20,6 @@ graph_height_pdf = 200
 graph_width_pdf = graph_height_pdf * 1.7
 dot_radius = 4
 
-bounding_top_left = [50, 700]
-bounding_width = 500
-bounding_height = 300
-
 x_label_vertical_offset = 35
 x_label_width = 50
 x_label_height = 30
@@ -35,6 +31,13 @@ y_label_width = 70
 y_label_text_box_options = { align: :right, valign: :center }
 y_label_horizontal_offset = 80
 
+container_x_padding = 20
+container_y_padding = 20
+container_width = container_x_padding * 2 + x_label_width + graph_width_pdf
+container_height = container_y_padding * 2 + y_label_height + graph_height_pdf
+
+graph_top_left = [(container_x_padding + x_label_width), (container_y_padding + y_label_height + graph_height_pdf)]
+
 orange = "D95D2E"
 green = "62C545"
 light_blue = "EDF1F7"
@@ -43,12 +46,12 @@ white = "FFFFFF"
 Prawn::Document.extensions << PrawnChartRenderer
 
 pdf = Prawn::Document.new
-pdf.bounding_box(bounding_top_left, :width => bounding_width, :height => bounding_height) do
+pdf.bounding_box([0, pdf.cursor], :width => container_width, :height => container_height) do
   pdf.stroke_bounds
   pdf.fill_color = light_blue
-  pdf.fill_rectangle([0, pdf.cursor], bounding_width, bounding_height)
+  pdf.fill_rectangle([0, pdf.cursor], container_width, container_height)
 
-  pdf.bounding_box([100, pdf.cursor - 50], :width => graph_width_pdf, :height => graph_height_pdf) do
+  pdf.bounding_box(graph_top_left, :width => graph_width_pdf, :height => graph_height_pdf) do
     pdf.stroke_bounds
     pdf.fill_color = white
     pdf.fill_rectangle([0, pdf.cursor], graph_width_pdf, graph_height_pdf)
