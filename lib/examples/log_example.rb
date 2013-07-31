@@ -33,16 +33,31 @@ y_label_text_box_options = { align: :right, valign: :center }
 graph_title_text = "Cool Prawn Graph"
 graph_title_height = 40
 
-container_x_padding = 20
-container_y_padding = 5
+container_left_padding = 0
+container_right_padding = 20
+container_top_padding = 20
+container_bottom_padding = 0
 
-container_left_gap = ContainerDataCollector.left_gap(container_x_padding, y_label_width, y_label_offset)
-container_right_gap = ContainerDataCollector.right_gap(container_x_padding)
-container_top_gap = ContainerDataCollector.top_gap(container_y_padding, graph_title_height)
-container_bottom_gap = ContainerDataCollector.bottom_gap(container_y_padding, x_label_height)
+y_title_width = 30
+y_title_text = "HCV Viral Load"
+
+x_title_height = 40
+x_title_text = "Month"
+
+container_left_gap = ContainerDataCollector.left_gap(container_left_padding, y_label_width, y_label_offset, y_title_width)
+container_right_gap = ContainerDataCollector.right_gap(container_right_padding)
+container_top_gap = ContainerDataCollector.top_gap(container_top_padding, graph_title_height)
+container_bottom_gap = ContainerDataCollector.bottom_gap(container_bottom_padding, x_label_height, x_title_height)
 
 graph_title_position = ContainerDataCollector.graph_title_top_left(container_left_gap, container_bottom_gap, graph_height_pdf, graph_title_height)
 graph_title_options = { align: :center, valign: :center}
+
+y_title_position = ContainerDataCollector.y_title_top_left(container_left_padding, container_bottom_gap, graph_height_pdf)
+# specifying width is a temp hack solution because of a Prawn bug: https://github.com/prawnpdf/prawn/pull/505
+y_title_options = { align: :center, valign: :center, rotate: 90, rotate_around: :center, width: 65 }
+
+x_title_position = ContainerDataCollector.x_title_top_left(container_left_gap, container_bottom_padding, x_title_height)
+x_title_options = { align: :center, valign: :center }
 
 container_width = ContainerDataCollector.width(container_left_gap, container_right_gap, graph_width_pdf)
 container_height = ContainerDataCollector.height(container_bottom_gap, container_top_gap, graph_height_pdf)
@@ -66,6 +81,12 @@ pdf.bounding_box([0, pdf.cursor], :width => container_width, :height => containe
 
   graph_title_data = GraphTitleDataCollector.new(graph_title_text, graph_title_position, graph_title_height, graph_width_pdf).collect
   pdf.draw_title(graph_title_data, graph_title_options)
+
+  y_title_data = GraphTitleDataCollector.new(y_title_text, y_title_position, graph_height_pdf, y_title_width).collect
+  pdf.draw_title(y_title_data, y_title_options)
+
+  x_title_data = GraphTitleDataCollector.new(x_title_text, x_title_position, x_title_height, graph_width_pdf).collect
+  pdf.draw_title(x_title_data, x_title_options)
 
   pdf.bounding_box(graph_top_left, :width => graph_width_pdf, :height => graph_height_pdf) do
     pdf.stroke_bounds
