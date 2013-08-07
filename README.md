@@ -12,6 +12,7 @@ file on your Desktop:
 ```bash
 $ ruby lib/examples/log_example.rb
 ```
+![alt tag](https://raw.github.com/MrPowers/prawn_charts/tree/master/images/prawn_charts_log_example.png)
 
 ## Code Organization
 
