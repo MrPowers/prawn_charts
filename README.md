@@ -3,21 +3,31 @@
 # Prawn Charts
 
 Prawn Charts is a Prawn graphing library to create linear or log line
-charts in Prawn.  
+charts in Prawn with no dependencies other than Prawn.
 
-## Example
+## Examples
 
 Clone the respository and run the following script to generate a PDF
-file on your Desktop:
+file with a log graph on your Desktop:
 ```bash
 $ ruby lib/examples/log_example.rb
 ```
+
+This script will generate a PDF file of a log graph that is only 6KB.
+
 ![alt tag](https://raw.github.com/MrPowers/prawn_charts/master/images/prawn_charts_log_example.png)
+
+
+Prawn Charts can also be used to generate linear graphs.  This graph
+does not leverage built in features (i.e. graph title, y label, x label)
+and demonstrates that Prawn Charts is easily customizable.
+
+![alt tag](https://raw.github.com/MrPowers/prawn_charts/master/images/simple_linear_example.png)
 
 ## Code Organization
 
 The DataCollectors (located in lib/data_collectors) are responsible for
-manipulating input data in a format suitable for the Pdf Renderers.  The
+manipulating input data in a format suitable for the PrawnChartRenderer.  The
 PrawnChartRenderer module should be mixed in to Prawn::Document, so the
 renderer methods can be called directly on the Prawn::Document object.  
 
@@ -38,4 +48,4 @@ end
 ```
 
 There are separate methods to draw_chart(), draw_dots(), draw_labels(),
-and draw_horizontal_lines(), so the charts can be customized.
+draw_horizontal_lines(), and draw titles, so the charts can be customized.
