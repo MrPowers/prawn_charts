@@ -7,12 +7,15 @@ class LinearYPdfDataCollector
   end
 
   def collect
-    input_data.inject([]) { |memo, (_, y_units)| memo << y_units * pdf_points_per_unit; memo }
+    input_data.inject([]) do |memo, (_, y_units)|
+      result = y_units.nil? ? nil : y_units * pdf_points_per_unit
+      memo << result
+    end
   end
 
   private
 
   def pdf_points_per_unit
-    graph_height_pdf / y_labels.max
+    graph_height_pdf.to_f / y_labels.max
   end
 end
