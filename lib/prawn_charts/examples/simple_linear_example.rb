@@ -84,20 +84,21 @@ module PrawnCharts
     end
   end
 
-  Prawn::Document.extensions << PrawnChartRenderer
-
-  pdf = Prawn::Document.new
-
-  le = CreateLinearExample.new
-
-  pdf.bounding_box([50, pdf.cursor], :width => le.graph_width_pdf, :height => le.graph_height_pdf) do
-    pdf.stroke_bounds
-    pdf.draw_chart(le.pdf_data)
-    pdf.draw_dots(le.pdf_data, le.dot_radius)
-    pdf.draw_labels(le.x_label_data, le.x_label_width, le.x_label_height, le.x_label_text_box_options)
-    pdf.draw_labels(le.y_label_data, le.y_label_width, le.y_label_height, le.y_label_text_box_options)
-    pdf.draw_horizontal_lines(le.horizontal_lines_data)
-  end
-
-  pdf.render_file(Dir.home + "/desktop/simple_linear_prawn_graph.pdf")
 end
+
+Prawn::Document.extensions << PrawnCharts::PrawnChartRenderer
+
+pdf = Prawn::Document.new
+
+le = PrawnCharts::CreateLinearExample.new
+
+pdf.bounding_box([50, pdf.cursor], :width => le.graph_width_pdf, :height => le.graph_height_pdf) do
+  pdf.stroke_bounds
+  pdf.draw_chart(le.pdf_data)
+  pdf.draw_dots(le.pdf_data, le.dot_radius)
+  pdf.draw_labels(le.x_label_data, le.x_label_width, le.x_label_height, le.x_label_text_box_options)
+  pdf.draw_labels(le.y_label_data, le.y_label_width, le.y_label_height, le.y_label_text_box_options)
+  pdf.draw_horizontal_lines(le.horizontal_lines_data)
+end
+
+pdf.render_file(Dir.home + "/desktop/simple_linear_prawn_graph.pdf")

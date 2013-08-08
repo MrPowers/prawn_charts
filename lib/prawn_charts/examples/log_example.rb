@@ -176,54 +176,54 @@ module PrawnCharts
       container_data_collector.graph_top_left
     end
   end
-
-  ##################################
-  #Colors
-  ##################################
-
-  orange = "D95D2E"
-  green = "62C545"
-  light_blue = "EDF1F7"
-  white = "FFFFFF"
-  black = "000000"
-
-  ##################################
-  #Create PDF
-  ##################################
-
-  Prawn::Document.extensions << PrawnChartRenderer
-
-  lg = CreateLogPdf.new
-
-  pdf = Prawn::Document.new
-  pdf.bounding_box([0, pdf.cursor], :width => lg.container_data_collector.width, :height => lg.container_data_collector.height) do
-    pdf.stroke_bounds
-    pdf.fill_color = light_blue
-    pdf.fill_rectangle([0, pdf.cursor], lg.container_data_collector.width, lg.container_data_collector.height)
-    pdf.fill_color = black
-
-    pdf.draw_title(lg.graph_title_data, lg.graph_title_options)
-    pdf.draw_title(lg.y_title_data, lg.y_title_options)
-    pdf.draw_title(lg.x_title_data, lg.x_title_options)
-
-    pdf.bounding_box(lg.container_data_collector.graph_top_left, :width => lg.graph_width_pdf, :height => lg.graph_height_pdf) do
-      pdf.stroke_bounds
-      pdf.fill_color = white
-      pdf.fill_rectangle([0, pdf.cursor], lg.graph_width_pdf, lg.graph_height_pdf)
-
-      pdf.stroke_color = green
-      pdf.draw_chart(lg.pdf_data)
-      pdf.fill_color = orange
-      pdf.draw_dots(lg.pdf_data, lg.dot_radius)
-
-      pdf.fill_color = black
-      pdf.draw_labels(lg.x_label_data, lg.x_label_width, lg.x_label_height, lg.x_label_text_box_options)
-
-      pdf.draw_labels(lg.y_label_data, lg.y_label_width, lg.y_label_height, lg.y_label_text_box_options)
-
-      pdf.stroke_color = black
-      pdf.draw_horizontal_lines(lg.horizontal_lines_data)
-    end
-  end
-  pdf.render_file(Dir.home + "/desktop/log_prawn_graph.pdf")
 end
+
+##################################
+#Colors
+##################################
+
+orange = "D95D2E"
+green = "62C545"
+light_blue = "EDF1F7"
+white = "FFFFFF"
+black = "000000"
+
+##################################
+#Create PDF
+##################################
+
+Prawn::Document.extensions << PrawnCharts::PrawnChartRenderer
+
+lg = PrawnCharts::CreateLogPdf.new
+
+pdf = Prawn::Document.new
+pdf.bounding_box([0, pdf.cursor], :width => lg.container_data_collector.width, :height => lg.container_data_collector.height) do
+  pdf.stroke_bounds
+  pdf.fill_color = light_blue
+  pdf.fill_rectangle([0, pdf.cursor], lg.container_data_collector.width, lg.container_data_collector.height)
+  pdf.fill_color = black
+
+  pdf.draw_title(lg.graph_title_data, lg.graph_title_options)
+  pdf.draw_title(lg.y_title_data, lg.y_title_options)
+  pdf.draw_title(lg.x_title_data, lg.x_title_options)
+
+  pdf.bounding_box(lg.container_data_collector.graph_top_left, :width => lg.graph_width_pdf, :height => lg.graph_height_pdf) do
+    pdf.stroke_bounds
+    pdf.fill_color = white
+    pdf.fill_rectangle([0, pdf.cursor], lg.graph_width_pdf, lg.graph_height_pdf)
+
+    pdf.stroke_color = green
+    pdf.draw_chart(lg.pdf_data)
+    pdf.fill_color = orange
+    pdf.draw_dots(lg.pdf_data, lg.dot_radius)
+
+    pdf.fill_color = black
+    pdf.draw_labels(lg.x_label_data, lg.x_label_width, lg.x_label_height, lg.x_label_text_box_options)
+
+    pdf.draw_labels(lg.y_label_data, lg.y_label_width, lg.y_label_height, lg.y_label_text_box_options)
+
+    pdf.stroke_color = black
+    pdf.draw_horizontal_lines(lg.horizontal_lines_data)
+  end
+end
+pdf.render_file(Dir.home + "/desktop/log_prawn_graph.pdf")
