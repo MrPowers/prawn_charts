@@ -1,4 +1,4 @@
-require_relative "./../prawn_charts"
+require_relative "./../../prawn_charts"
 
 module PrawnCharts
   ##################################
