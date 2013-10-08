@@ -59,8 +59,8 @@ module PrawnCharts
       end
     end
 
-    def draw_graph(starting_point, width, height, data, y_labels_units = nil)
-      collector = SingleFileDataCollector.new(height, width, data, y_labels_units)
+    def draw_graph(input)
+      collector = SingleFileDataCollector.new(input.fetch(:graph))
       translate(*starting_point) do
         stroke_rectangle([0, height], width, height)
         draw_line(collector.graph_data_points)
@@ -73,13 +73,5 @@ module PrawnCharts
         draw_y_title("Y Title", collector.height, -50, {})
       end
     end
-    data = [{y: 5, x_label: "Jan 11"}, {y: 17, x_label: "Feb 11"}, {y: 14, x_label: "Mar 11"}]
-    input = {
-      :graph => {:starting_point => [100, 200], :width => 300, :height => 200, :data => data, :y_labels => [0, 5, 10, 15, 20]},
-      :horizontal_lines => true,
-      :graph_title => { :title => "cool graph", :vertical_offset => 50, :text_box_options => {}},
-      :x_title => { :title => "x title", :vertical_offset => -60, :text_box_options => {}},
-      :y_title => { :title => "y title", :horizontal_offset => -50, :text_box_options => {}}
-    }
   end
 end

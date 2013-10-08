@@ -1,11 +1,12 @@
 class SingleFileDataCollector
   attr_reader :height, :width, :data
   # data is in this format = [{y: 5, x_label: "Jan 11"}, {y: 17, x_label: "Feb 11"}]
-  def initialize(height, width, data, y_labels_units = nil)
-    @height = height
-    @width = width
-    @data = data
-    @y_labels_units = y_labels_units
+  # {:starting_point => [100, 200], :width => 300, :height => 200, :data => data, :y_labels => [0, 5, 10, 15, 20]}
+  def initialize(input)
+    @height = input.fetch(:height)
+    @width = input.fetch(:width)
+    @data = input.fetch(:data)
+    @y_labels_units = input.fetch(:y_labels, nil)
   end
 
   def graph_data_points
