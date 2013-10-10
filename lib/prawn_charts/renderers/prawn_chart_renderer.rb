@@ -1,31 +1,63 @@
 module PrawnCharts
   module PrawnChartRenderer
-    def draw_chart(pdf_data)
-      pdf_data.each_index do |i|
-        stroke_line(pdf_data[i], pdf_data[i + 1]) unless pdf_data[i + 1].nil?
+    def draw_line(graph_points)
+      graph_points.each_index do |i|
+        stroke_line(graph_points[i], graph_points[i + 1]) unless graph_points[i + 1].nil?
       end
     end
 
-    def draw_dots(pdf_data, dot_radius)
-      pdf_data.each do |point|
+    def draw_dots(graph_points, dot_radius = 4)
+      graph_points.each do |point|
         fill_circle(point, dot_radius)
       end
     end
 
-    def draw_horizontal_lines(horizontal_lines_data)
-      horizontal_lines_data.each do |start_x, end_x, y|
-        stroke_horizontal_line start_x, end_x, at: y
+    def draw_x_labels(label_data, offset, options)
+      label_width = options[:width]
+      centering_adjustment = label_width / 2
+      translate(0, offset) do
+        label_data.each do |data|
+         text_box(data[:label], {at: [(data[:x] - centering_adjustment), 20]}.merge(options))
+        end
       end
     end
 
-    def draw_labels(label_data, width, height, options = {})
-      label_data.each do |label, pdf_point|
-        text_box(label, { at: pdf_point, width: width, height: height }.merge(options))
+    def draw_y_labels(label_data, offset, options)
+      label_height = options[:height]
+      centering_adjustment = label_height / 2
+      translate(offset, 0) do
+        label_data.each do |data|
+          text_box(data[:label], {at: ([0, data[:y] + centering_adjustment]) }.merge(options))
+        end
       end
     end
 
-    def draw_title(inputs, options = {})
-      text_box(inputs[:title], { at: inputs[:at], width: inputs[:width], height: inputs[:height] }.merge(options))
+    def draw_horizontal_lines(data)
+      data.each do |start_point, end_point|
+        stroke_line(start_point, end_point)
+      end
+    end
+
+    def draw_title(translation, title, options)
+      translate(*translation) do
+        text_box(title, options)
+      end
+    end
+
+    def draw_graph(input)
+      collector = SingleFileDataCollector.new(input.fetch(:graph))
+      assistant = RendererAssistant.new(input)
+      translate(*input[:graph][:starting_point]) do
+        stroke_rectangle([0, collector.height], collector.width, collector.height)
+        draw_line(collector.graph_data_points)
+        draw_dots(collector.graph_data_points)
+        draw_x_labels(collector.x_labels, assistant.x_labels_offset, assistant.x_labels_options)
+        draw_y_labels(collector.y_labels, assistant.y_labels_offset, assistant.y_labels_options)
+        draw_horizontal_lines(collector.horizontal_lines) if input[:horizontal_lines]
+        draw_title(assistant.graph_title_translate, assistant.graph_title, assistant.graph_title_options) if input[:graph_title]
+        draw_title(assistant.x_title_translate, assistant.x_title, assistant.x_title_options) if input[:x_title]
+        draw_title(assistant.y_title_translate, assistant.y_title, assistant.y_title_options) if input[:y_title]
+      end
     end
   end
 end
