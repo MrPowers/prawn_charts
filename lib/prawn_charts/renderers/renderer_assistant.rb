@@ -53,6 +53,24 @@ class RendererAssistant
     default_y_title_options.merge(input[:y_title][:text_box_options]) || default_y_title_options
   end
 
+  # x_labels
+  def x_labels_offset
+    offset(:x_labels, default_x_labels_offset)
+  end
+
+  def x_labels_options
+    default_x_labels_options.merge(input[:x_labels][:text_box_options]) || default_x_labels_options
+  end
+
+  # y_labels
+  def y_labels_offset
+    offset(:y_labels, default_y_labels_offset)
+  end
+
+  def y_labels_options
+    default_y_labels_options.merge(input[:y_labels][:text_box_options]) || default_y_labels_options
+  end
+
   private
 
   def offset(title_type, default_offset)
@@ -87,4 +105,29 @@ class RendererAssistant
     -50
   end
 
+  # x_labels
+  def default_x_labels_offset
+    -70
+  end
+
+  def default_x_labels_width
+    100
+  end
+
+  def default_x_labels_options
+    { align: :center, rotate: 45 }
+  end
+
+  # y_labels
+  def default_y_labels_offset
+    -40
+  end
+
+  def default_y_labels_height
+    40
+  end
+
+  def default_y_labels_options
+    { width: 40, valign: :center }
+  end
 end
