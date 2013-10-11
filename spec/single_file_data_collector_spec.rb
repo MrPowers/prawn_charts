@@ -1,12 +1,12 @@
 require "spec_helper"
 
 module PrawnCharts
-  describe SingleFileDataCollector do
+  describe DataCollector do
     before do
       height = 60
       width = 80
       data = [{y: 5, x_label: "Jan 11"}, {y: 17, x_label: "Feb 11"}]
-      @collector = SingleFileDataCollector.new(height, width, data)
+      @collector = DataCollector.new(height, width, data)
     end
 
     context "#x_labels_data" do

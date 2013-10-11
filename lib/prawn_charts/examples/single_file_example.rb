@@ -16,6 +16,21 @@ data = [{y: 5, x_label: "Jan 11"}, {y: 17, x_label: "Feb 11"}, {y: 14, x_label: 
   #:y_labels => { :offset => -40, :text_box_options => { :height => 40, valign: :center } }
 #}
 
+red = "FF0000"
+orange = "CC4A14"
+light_green = "E7FFD4"
+bright_green = "40FF40"
+light_brown = "99583D"
+black = "000000"
+
+colors = {
+  :rectangle_border => red,
+  :rectangle_fill => light_green,
+  :line => orange,
+  :dots => black,
+  :x_labels => red
+}
+
 input = {
   :graph => {:starting_point => [100, 200], :width => 300, :height => 200, :data => data, :y_labels => [0, 5, 10, 15, 20]},
   :dots => {},
@@ -27,6 +42,6 @@ input = {
   :y_title => { :title => "y title" },
 }
 
-pdf.draw_graph(input)
+pdf.draw_graph(input, colors)
 
 pdf.render_file(Dir.home + "/desktop/simple_linear_prawn_graph.pdf")
