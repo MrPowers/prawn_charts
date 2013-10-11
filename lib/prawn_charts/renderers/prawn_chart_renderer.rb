@@ -6,7 +6,7 @@ module PrawnCharts
       end
     end
 
-    def draw_dots(graph_points, dot_radius = 4)
+    def draw_dots(graph_points, dot_radius)
       graph_points.each do |point|
         fill_circle(point, dot_radius)
       end
@@ -17,7 +17,7 @@ module PrawnCharts
       centering_adjustment = label_width / 2
       translate(0, offset) do
         label_data.each do |data|
-         text_box(data[:label], {at: [(data[:x] - centering_adjustment), 20]}.merge(options))
+         text_box(data[:label], {at: [(data[:x] - centering_adjustment), 0]}.merge(options))
         end
       end
     end
@@ -50,9 +50,9 @@ module PrawnCharts
       translate(*input[:graph][:starting_point]) do
         stroke_rectangle([0, collector.height], collector.width, collector.height)
         draw_line(collector.graph_data_points)
-        draw_dots(collector.graph_data_points)
-        draw_x_labels(collector.x_labels, assistant.x_labels_offset, assistant.x_labels_options)
-        draw_y_labels(collector.y_labels, assistant.y_labels_offset, assistant.y_labels_options)
+        draw_dots(collector.graph_data_points, assistant.dot_radius) if input[:dots]
+        draw_x_labels(collector.x_labels, assistant.x_labels_offset, assistant.x_labels_options) if input[:x_labels]
+        draw_y_labels(collector.y_labels, assistant.y_labels_offset, assistant.y_labels_options) if input[:y_labels]
         draw_horizontal_lines(collector.horizontal_lines) if input[:horizontal_lines]
         draw_title(assistant.graph_title_translate, assistant.graph_title, assistant.graph_title_options) if input[:graph_title]
         draw_title(assistant.x_title_translate, assistant.x_title, assistant.x_title_options) if input[:x_title]

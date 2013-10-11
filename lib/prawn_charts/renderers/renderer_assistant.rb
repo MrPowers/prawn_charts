@@ -8,19 +8,25 @@ class RendererAssistant
     @collector ||= SingleFileDataCollector.new(input.fetch(:graph))
   end
 
+  # dots
+  def dot_radius
+    return default_dot_radius unless input.dig(:dots, :radius)
+    input[:dots][:radius]
+  end
+
   # graph_title
   def graph_title_translate
     [0, collector.height + offset(:graph_title, default_graph_title_offset)]
   end
 
   def graph_title
-    title = input[:graph_title][:title]
-    raise "Graph must have title" unless title
-    title
+    raise "Graph must have title" unless input.dig(:graph_title, :title)
+    input[:graph_title][:title]
   end
 
   def graph_title_options
-    default_graph_title_options.merge(input[:graph_title][:text_box_options]) || default_graph_title_options
+    return default_graph_title_options unless input.dig(:graph_title, :text_box_options)
+    input[:graph_title][:text_box_options]
   end
 
   # x_title
@@ -29,13 +35,13 @@ class RendererAssistant
   end
 
   def x_title
-    title = input[:x_title][:title]
-    raise "Graph must have title" unless title
-    title
+    raise "Graph must have title" unless input.dig(:x_title, :title)
+    input[:x_title][:title]
   end
 
   def x_title_options
-    default_x_title_options.merge(input[:x_title][:text_box_options]) || default_x_title_options
+    return default_x_title_options unless input.dig(:x_title, :text_box_options)
+    input[:x_title][:text_box_options]
   end
 
   # y_title
@@ -44,13 +50,13 @@ class RendererAssistant
   end
 
   def y_title
-    title = input[:y_title][:title]
-    raise "Graph must have title" unless title
-    title
+    raise "Graph must have title" unless input.dig(:y_title, :title)
+    input[:y_title][:title]
   end
 
   def y_title_options
-    default_y_title_options.merge(input[:y_title][:text_box_options]) || default_y_title_options
+    return default_y_title_options unless input.dig(:y_title, :text_box_options)
+    input[:y_title][:text_box_options]
   end
 
   # x_labels
@@ -59,7 +65,8 @@ class RendererAssistant
   end
 
   def x_labels_options
-    default_x_labels_options.merge(input[:x_labels][:text_box_options]) || default_x_labels_options
+    return default_x_labels_options unless input.dig(:x_labels, :text_box_options)
+    input[:x_labels][:text_box_options]
   end
 
   # y_labels
@@ -68,14 +75,19 @@ class RendererAssistant
   end
 
   def y_labels_options
-    default_y_labels_options.merge(input[:y_labels][:text_box_options]) || default_y_labels_options
+    return default_y_labels_options unless input.dig(:y_labels, :text_box_options)
+    input[:y_labels][:text_box_options]
   end
 
   private
 
+  def default_dot_radius
+    4
+  end
+
   def offset(title_type, default_offset)
-    return input[title_type][:offset] if input[title_type][:offset]
-    default_offset
+    return default_offset unless input.dig(title_type, :offset)
+    input[title_type][:offset]
   end
 
   # graph title
@@ -107,15 +119,11 @@ class RendererAssistant
 
   # x_labels
   def default_x_labels_offset
-    -70
-  end
-
-  def default_x_labels_width
-    100
+    -50
   end
 
   def default_x_labels_options
-    { align: :center, rotate: 45 }
+    { :width => 100, :height => 20, align: :center, rotate: 45 }
   end
 
   # y_labels
@@ -123,11 +131,7 @@ class RendererAssistant
     -40
   end
 
-  def default_y_labels_height
-    40
-  end
-
   def default_y_labels_options
-    { width: 40, valign: :center }
+    { width: 40, :height => 40, valign: :center }
   end
 end

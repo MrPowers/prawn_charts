@@ -7,3 +7,4 @@ end
 lib_path = File.expand_path(File.dirname(__FILE__))
 Dir["#{lib_path}/prawn_charts/data_collectors/**/*.rb"].each {|file| require file }
 Dir["#{lib_path}/prawn_charts/renderers/**/*.rb"].each {|file| require file }
+require_relative "./prawn_charts/core_extensions.rb"
