@@ -6,3 +6,6 @@ end
 
 lib_path = File.expand_path(File.dirname(__FILE__))
 Dir["#{lib_path}/prawn_charts/*.rb"].each {|file| require file }
+
+Prawn::Document.extensions << PrawnCharts::PrawnChartRenderer
+Prawn::Document.extensions << PrawnCharts::Helpers

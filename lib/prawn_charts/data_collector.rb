@@ -59,7 +59,9 @@ module PrawnCharts
     end
 
     def y_pdf_data_points
-      data.map {|h| h[:y] * pdf_points_per_y_unit}
+      data.map  do |h|
+        h[:y] ? h[:y] * pdf_points_per_y_unit : nil
+      end
     end
 
     # x methods

@@ -1,13 +1,15 @@
 module PrawnCharts
   module PrawnChartRenderer
     def draw_line(graph_points)
-      graph_points.each_index do |i|
-        stroke_line(graph_points[i], graph_points[i + 1]) unless graph_points[i + 1].nil?
+      data = graph_points.reject { |x, y| y.nil? }
+      data.each_index do |i|
+        stroke_line(data[i], data[i + 1]) unless data[i + 1].nil?
       end
     end
 
     def draw_dots(graph_points, dot_radius)
-      graph_points.each do |point|
+      data = graph_points.reject { |x, y| y.nil? }
+      data.each do |point|
         fill_circle(point, dot_radius)
       end
     end
@@ -48,21 +50,21 @@ module PrawnCharts
       assistant = RendererAssistant.new(input)
       black = "000000"
       collector = assistant.collector
-      p colors
+      stroke_axis
       translate(*input[:graph][:starting_point]) do
-        self.stroke_color = (colors[:rectangle_border]) if colors[:rectangle_border]
+        self.stroke_color = colors[:rectangle_border] if colors[:rectangle_border]
         stroke_rectangle([0, collector.height], collector.width, collector.height)
         self.stroke_color = black
 
-        self.fill_color = (colors[:rectangle_fill]) if colors[:rectangle_fill]
+        self.fill_color = colors[:rectangle_fill] if colors[:rectangle_fill]
         fill_rectangle([0, collector.height], collector.width, collector.height) if colors[:rectangle_fill]
         self.fill_color = black
 
-        self.stroke_color = (colors[:line]) if colors[:line]
+        self.stroke_color = colors[:line] if colors[:line]
         draw_line(collector.graph_data_points)
         self.stroke_color = black
 
-        self.fill_color = (colors[:dots]) if colors[:dots]
+        self.fill_color = colors[:dots] if colors[:dots]
         draw_dots(collector.graph_data_points, assistant.dot_radius) if input[:dots]
         self.fill_color = black
 
@@ -70,11 +72,25 @@ module PrawnCharts
         draw_x_labels(collector.x_labels, assistant.x_labels_offset, assistant.x_labels_options) if input[:x_labels]
         self.fill_color = black
 
-        #draw_y_labels(collector.y_labels, assistant.y_labels_offset, assistant.y_labels_options) if input[:y_labels]
-        #draw_horizontal_lines(collector.horizontal_lines) if input[:horizontal_lines]
-        #draw_title(assistant.graph_title_translate, assistant.graph_title, assistant.graph_title_options) if input[:graph_title]
-        #draw_title(assistant.x_title_translate, assistant.x_title, assistant.x_title_options) if input[:x_title]
-        #draw_title(assistant.y_title_translate, assistant.y_title, assistant.y_title_options) if input[:y_title]
+        self.fill_color = colors[:y_labels] if colors[:y_labels]
+        draw_y_labels(collector.y_labels, assistant.y_labels_offset, assistant.y_labels_options) if input[:y_labels]
+        self.fill_color = black
+
+        self.stroke_color = colors[:horizontal_lines] if colors[:horizontal_lines]
+        draw_horizontal_lines(collector.horizontal_lines) if input[:horizontal_lines]
+        self.stroke_color = black
+
+        self.fill_color = colors[:graph_title] if colors [:graph_title]
+        draw_title(assistant.graph_title_translate, assistant.graph_title, assistant.graph_title_options) if input[:graph_title]
+        self.fill_color = black
+
+        self.fill_color = colors[:x_title] if colors [:x_title]
+        draw_title(assistant.x_title_translate, assistant.x_title, assistant.x_title_options) if input[:x_title]
+        self.fill_color = black
+
+        self.fill_color = colors[:y_title] if colors[:y_title]
+        draw_title(assistant.y_title_translate, assistant.y_title, assistant.y_title_options) if input[:y_title]
+        self.fill_color = black
       end
     end
   end

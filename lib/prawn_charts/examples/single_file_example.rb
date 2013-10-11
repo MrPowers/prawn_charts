@@ -1,10 +1,25 @@
 require_relative "./../../prawn_charts"
 
-Prawn::Document.extensions << PrawnCharts::PrawnChartRenderer
-
 pdf = Prawn::Document.new
 
-data = [{y: 5, x_label: "Jan 11"}, {y: 17, x_label: "Feb 11"}, {y: 14, x_label: "Mar 11"}]
+data = [
+  {x_label: "Apr-11", y: 10},
+  {x_label: "May-11", y: nil},
+  {x_label: "Jun-11", y: nil},
+  {x_label: "Jul-11", y: nil},
+  {x_label: "Aug-11", y: 3},
+  {x_label: "Sep-11", y: nil},
+  {x_label: "Oct-11", y: nil},
+  {x_label: "Dec-11", y: 17},
+  {x_label: "Jan-12", y: nil},
+  {x_label: "Feb-12", y: nil},
+  {x_label: "Mar-12", y: 14},
+  {x_label: "Apr-12", y: nil},
+  {x_label: "May-12", y: nil},
+  {x_label: "Jun-12", y: 16}
+]
+
+#data = [{y: 5, x_label: "Jan 11"}, {y: 17, x_label: "Feb 11"}, {y: 14, x_label: "Mar 11"}]
 #input = {
   #:graph => {:starting_point => [100, 200], :width => 300, :height => 200, :data => data, :y_labels => [0, 5, 10, 15, 20]},
   #:dots => { :radius => 4 },
@@ -16,23 +31,27 @@ data = [{y: 5, x_label: "Jan 11"}, {y: 17, x_label: "Feb 11"}, {y: 14, x_label: 
   #:y_labels => { :offset => -40, :text_box_options => { :height => 40, valign: :center } }
 #}
 
-red = "FF0000"
-orange = "CC4A14"
-light_green = "E7FFD4"
-bright_green = "40FF40"
-light_brown = "99583D"
+orange = "D95D2E"
+green = "62C545"
+light_blue = "EDF1F7"
+white = "FFFFFF"
 black = "000000"
 
 colors = {
-  :rectangle_border => red,
-  :rectangle_fill => light_green,
-  :line => orange,
-  :dots => black,
-  :x_labels => red
+  :rectangle_border => black,
+  :rectangle_fill => white,
+  :line => green,
+  :dots => orange,
+  :x_labels => black,
+  :y_labels => black,
+  :horizontal_lines => black,
+  :graph_title => black,
+  :x_title => black,
+  :y_title => black
 }
 
 input = {
-  :graph => {:starting_point => [100, 200], :width => 300, :height => 200, :data => data, :y_labels => [0, 5, 10, 15, 20]},
+  :graph => {:starting_point => [100, 400], :width => 300, :height => 200, :data => data, :y_labels => [0, 5, 10, 15, 20]},
   :dots => {},
   :y_labels => {},
   :x_labels => {},
