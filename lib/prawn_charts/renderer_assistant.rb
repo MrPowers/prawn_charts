@@ -10,6 +10,12 @@ module PrawnCharts
       @collector ||= DataCollector.new(input.fetch(:graph))
     end
 
+    def components_to_draw
+      available_components = [:rectangle_border, :rectangle_fill, :line, :dots, :x_labels, :y_labels, :horizontal_lines, :graph_title, :y_title, :x_title]
+      specified_components = [:rectangle_border, :rectangle_fill, :line] + @input.keys
+      @components_to_draw = available_components & specified_components
+    end
+
     # dots
     def dot_radius
       return default_dot_radius unless input.dig(:dots, :radius)
