@@ -1,0 +1,5 @@
+1. Document code
+2. Analyze how messages are being sent in the program
+3. Update draw_graph method so it is more elegant
+4. Read through all the code and refactor
+5. Add tests

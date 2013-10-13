@@ -1,5 +1,6 @@
 module PrawnCharts
   class RendererAssistant
+    # Parses input data and responds with smart defaults or user specified data
     attr_reader :input
     def initialize(input)
       @input = input

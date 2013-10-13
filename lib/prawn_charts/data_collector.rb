@@ -1,8 +1,9 @@
 module PrawnCharts
+  DataPoint = Struct.new(:x_label, :y_value)
+
   class DataCollector
+    # Arranges graph data in an easy format for Prawn to process
     attr_reader :height, :width, :data
-    # data is in this format = [{y: 5, x_label: "Jan 11"}, {y: 17, x_label: "Feb 11"}]
-    # {:starting_point => [100, 200], :width => 300, :height => 200, :data => data, :y_labels => [0, 5, 10, 15, 20]}
     def initialize(input)
       @height = input.fetch(:height)
       @width = input.fetch(:width)
@@ -10,24 +11,25 @@ module PrawnCharts
       @y_labels_units = input.fetch(:y_labels, nil)
     end
 
+    # Array of pdf x, y coordinates corresponding to points on a graph
     def graph_data_points
-      x_pdf_data_points.zip(y_pdf_data_points)
+      x_pdf_data_points.zip(y_pdf_data_points).reject { |x, y| y.nil? }
     end
 
+    # 
     def x_labels
       result = []
-      data.each_with_index do |data_point, index|
-        result << { label: data_point[:x_label], x: x_pdf_data_points[index] }
+      data_points.each_with_index do |data_point, index|
+        result << { label: data_point.x_label, x: x_pdf_data_points[index] }
       end
       result
     end
 
     def y_labels
-      result = []
-      y_labels_pdf.each do |label|
-        result << { label: label.to_s, y: label}
+      y_labels_units.inject([]) do |memo, label|
+        memo << { label: label.to_s, y: label * pdf_points_per_y_unit}
+        memo
       end
-      result
     end
 
     def horizontal_lines
@@ -38,20 +40,27 @@ module PrawnCharts
 
     private
 
+    def data_points
+      @data_points ||= data.map { |data| DataPoint.new(data[:x_label], data[:y]) }
+    end
+
     # y methods
     def y_labels_units
+      @y_labels_units || default_y_labels_units
+    end
+
+    def default_y_labels_units
       [0, (max_y_units.to_f / 2), max_y_units]
     end
 
     def y_labels_pdf
-      labels = @y_labels_units || y_labels_units
-      labels.map do |label|
+      y_labels_units.map do |label|
         (label * pdf_points_per_y_unit).round(1)
       end
     end
 
     def max_y_units
-      @y_labels_units ? @y_labels_units.max : data.map {|h| h[:y]}.max_units_units
+      @y_labels_units ? @y_labels_units.max : data_points.map {|data_point| data_point.y_value}.max_units_units
     end
 
     def pdf_points_per_y_unit
@@ -59,8 +68,8 @@ module PrawnCharts
     end
 
     def y_pdf_data_points
-      data.map  do |h|
-        h[:y] ? h[:y] * pdf_points_per_y_unit : nil
+      data_points.map  do |data_point|
+        data_point.y_value ? data_point.y_value * pdf_points_per_y_unit : nil
       end
     end
 

@@ -1,15 +1,13 @@
 module PrawnCharts
   module PrawnChartRenderer
     def draw_line(graph_points)
-      data = graph_points.reject { |x, y| y.nil? }
-      data.each_index do |i|
-        stroke_line(data[i], data[i + 1]) unless data[i + 1].nil?
+      graph_points.each_index do |i|
+        stroke_line(graph_points[i], graph_points[i + 1]) unless graph_points[i + 1].nil?
       end
     end
 
     def draw_dots(graph_points, dot_radius)
-      data = graph_points.reject { |x, y| y.nil? }
-      data.each do |point|
+      graph_points.each do |point|
         fill_circle(point, dot_radius)
       end
     end
@@ -46,51 +44,72 @@ module PrawnCharts
       end
     end
 
+    def set_component_color(method, colors, component)
+      self.send(method, colors[component]) if colors[component]
+    end
+
+    def stroke_black
+      black = "000000"
+      self.stroke_color = black
+    end
+
+    def fill_black
+      black = "000000"
+      self.fill_color = black
+    end
+
+    # not using this yet, but want a cool way to refactor draw_graph using the specified components to make 
+    # the code nicer
+    def components_to_draw(input)
+      available_components = [:line, :dots, :x_labels, :y_labels, :horizontal_lines, :graph_title, :y_title, :x_title]
+      specified_components = [:line] + input.keys
+      available_components & specified_components
+    end
+
     def draw_graph(input, colors = {})
       assistant = RendererAssistant.new(input)
-      black = "000000"
       collector = assistant.collector
       stroke_axis
       translate(*input[:graph][:starting_point]) do
-        self.stroke_color = colors[:rectangle_border] if colors[:rectangle_border]
+        set_component_color(:stroke_color, colors, :rectangle_border)
         stroke_rectangle([0, collector.height], collector.width, collector.height)
-        self.stroke_color = black
+        stroke_black
 
-        self.fill_color = colors[:rectangle_fill] if colors[:rectangle_fill]
+        set_component_color(:fill_color, colors, :rectangle_fill)
         fill_rectangle([0, collector.height], collector.width, collector.height) if colors[:rectangle_fill]
-        self.fill_color = black
+        fill_black
 
-        self.stroke_color = colors[:line] if colors[:line]
+        set_component_color(:stroke_color, colors, :line)
         draw_line(collector.graph_data_points)
-        self.stroke_color = black
+        stroke_black
 
-        self.fill_color = colors[:dots] if colors[:dots]
+        set_component_color(:fill_color, colors, :dots)
         draw_dots(collector.graph_data_points, assistant.dot_radius) if input[:dots]
-        self.fill_color = black
+        stroke_black
 
-        self.fill_color = colors[:x_labels] if colors[:x_labels]
+        set_component_color(:fill_color, colors, :x_labels)
         draw_x_labels(collector.x_labels, assistant.x_labels_offset, assistant.x_labels_options) if input[:x_labels]
-        self.fill_color = black
+        stroke_black
 
-        self.fill_color = colors[:y_labels] if colors[:y_labels]
+        set_component_color(:fill_color, colors, :y_labels)
         draw_y_labels(collector.y_labels, assistant.y_labels_offset, assistant.y_labels_options) if input[:y_labels]
-        self.fill_color = black
+        stroke_black
 
-        self.stroke_color = colors[:horizontal_lines] if colors[:horizontal_lines]
+        set_component_color(:stroke_color, colors, :horizontal_lines)
         draw_horizontal_lines(collector.horizontal_lines) if input[:horizontal_lines]
-        self.stroke_color = black
+        stroke_black
 
-        self.fill_color = colors[:graph_title] if colors [:graph_title]
+        set_component_color(:fill_color, colors, :graph_title)
         draw_title(assistant.graph_title_translate, assistant.graph_title, assistant.graph_title_options) if input[:graph_title]
-        self.fill_color = black
+        stroke_black
 
-        self.fill_color = colors[:x_title] if colors [:x_title]
+        set_component_color(:fill_color, colors, :x_title)
         draw_title(assistant.x_title_translate, assistant.x_title, assistant.x_title_options) if input[:x_title]
-        self.fill_color = black
+        stroke_black
 
-        self.fill_color = colors[:y_title] if colors[:y_title]
+        set_component_color(:fill_color, colors, :y_title)
         draw_title(assistant.y_title_translate, assistant.y_title, assistant.y_title_options) if input[:y_title]
-        self.fill_color = black
+        stroke_black
       end
     end
   end
