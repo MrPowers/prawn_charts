@@ -1,6 +1,4 @@
 module PrawnCharts
-  DataPoint = Struct.new(:x_label, :y_value)
-
   class DataCollector
     # Arranges graph data in an easy format for Prawn to process
     attr_reader :height, :width, :data
@@ -9,20 +7,6 @@ module PrawnCharts
       @width = input.fetch(:width)
       @data = input.fetch(:data)
       @y_labels_units = input.fetch(:y_labels, nil)
-    end
-
-    # Array of pdf x, y coordinates corresponding to points on a graph
-    def graph_data_points
-      x_pdf_data_points.zip(y_pdf_data_points).reject { |x, y| y.nil? }
-    end
-
-    # 
-    def x_labels
-      result = []
-      data_points.each_with_index do |data_point, index|
-        result << { label: data_point.x_label, x: x_pdf_data_points[index] }
-      end
-      result
     end
 
     def y_labels
@@ -38,11 +22,23 @@ module PrawnCharts
       end
     end
 
-    private
-
     def data_points
-      @data_points ||= data.map { |data| DataPoint.new(data[:x_label], data[:y]) }
+      @data_points ||= data.map.with_index do |data, index|
+        DataPoint.new(
+          x_units: index,
+          y_units: data[:y],
+          x_pdf: index * pdf_points_per_x_unit,
+          y_pdf: (data[:y] * pdf_points_per_y_unit if data[:y]),
+          x_label: data[:x_label]
+        )
+      end
     end
+
+    def graph_points
+      data_points.select { |data_point| data_point.x_pdf && data_point.y_pdf }
+    end
+
+    private
 
     # y methods
     def y_labels_units
@@ -67,12 +63,6 @@ module PrawnCharts
       height / max_y_units.to_f
     end
 
-    def y_pdf_data_points
-      data_points.map  do |data_point|
-        data_point.y_value ? data_point.y_value * pdf_points_per_y_unit : nil
-      end
-    end
-
     # x methods
     def max_x_units
       data.length - 1
@@ -81,14 +71,5 @@ module PrawnCharts
     def pdf_points_per_x_unit
       width / max_x_units.to_f
     end
-
-    def x_pdf_data_points
-      result = [0]
-      (data.length - 1).times do
-        result << (result[-1] + pdf_points_per_x_unit)
-      end
-      result
-    end
-
   end
 end
