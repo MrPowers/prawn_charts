@@ -84,7 +84,7 @@ module PrawnCharts
 
     def y_labels_options
       return default_y_labels_options unless input.dig(:y_labels, :text_box_options)
-      input[:y_labels][:text_box_options]
+      default_y_labels_options.merge(input[:y_labels][:text_box_options])
     end
 
     private

@@ -118,7 +118,6 @@ module PrawnCharts
     def draw_graph(input, colors = {})
       @assistant = RendererAssistant.new(input)
       @collector = @assistant.collector
-      @input = input
       @colors = colors
       stroke_axis
       translate(*input[:graph][:starting_point]) do

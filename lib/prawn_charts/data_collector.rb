@@ -1,24 +1,26 @@
 module PrawnCharts
   class DataCollector
     # Arranges graph data in an easy format for Prawn to process
-    attr_reader :height, :width, :data
+    attr_reader :height, :width, :data, :y_labels_units, :scale
     def initialize(input)
       @height = input.fetch(:height)
       @width = input.fetch(:width)
       @data = input.fetch(:data)
       @y_labels_units = input.fetch(:y_labels, nil)
+      @scale = input.fetch(:scale, :linear)
     end
 
     def y_labels
       y_labels_units.inject([]) do |memo, label|
-        memo << { label: label.to_s, y: label * pdf_points_per_y_unit}
+        memo << { label: label.to_s, y: y_convert_to_pdf(label)}
         memo
       end
     end
 
     def horizontal_lines
-      y_labels_pdf.map do |y|
-        [[0, y], [width, y]]
+      y_labels_units.map do |y|
+        y_pdf = y_convert_to_pdf(y)
+        [[0, y_pdf], [width, y_pdf]]
       end
     end
 
@@ -28,7 +30,7 @@ module PrawnCharts
           x_units: index,
           y_units: data[:y],
           x_pdf: index * pdf_points_per_x_unit,
-          y_pdf: (data[:y] * pdf_points_per_y_unit if data[:y]),
+          y_pdf: (y_convert_to_pdf(data[:y]) if data[:y]),
           x_label: data[:x_label]
         )
       end
@@ -40,27 +42,13 @@ module PrawnCharts
 
     private
 
-    # y methods
-    def y_labels_units
-      @y_labels_units || default_y_labels_units
+    def vertical_data_collector
+      return LinearVerticalDataCollector.new(height, y_labels_units) if scale == :linear
+      LogVerticalDataCollector.new(height, y_labels_units)
     end
 
-    def default_y_labels_units
-      [0, (max_y_units.to_f / 2), max_y_units]
-    end
-
-    def y_labels_pdf
-      y_labels_units.map do |label|
-        (label * pdf_points_per_y_unit).round(1)
-      end
-    end
-
-    def max_y_units
-      @y_labels_units ? @y_labels_units.max : data_points.map {|data_point| data_point.y_value}.max_units_units
-    end
-
-    def pdf_points_per_y_unit
-      height / max_y_units.to_f
+    def y_convert_to_pdf(n)
+      vertical_data_collector.convert_to_pdf(n)
     end
 
     # x methods
