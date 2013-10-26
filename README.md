@@ -49,3 +49,17 @@ end
 
 There are separate methods to draw_chart(), draw_dots(), draw_labels(),
 draw_horizontal_lines(), and draw titles, so the charts can be customized.
+
+## Example Input
+
+data = [{y: 5, x_label: "Jan 11"}, {y: 17, x_label: "Feb 11"}, {y: 14, x_label: "Mar 11"}]
+input = {
+  :graph => {:starting_point => [100, 200], :width => 300, :height => 200, :data => data, :y_labels => [0, 5, 10, 15, 20]},
+  :dots => { :radius => 4 },
+  :horizontal_lines => true,
+  :graph_title => { :title => "cool graph", :offset => 50, :text_box_options => {} },
+  :x_title => { :title => "x title", :offset => -60, :text_box_options => {} },
+  :y_title => { :title => "y title", :offset => -50, :text_box_options => {} },
+  :x_labels => { :offset => -50, :text_box_options => { :width => 100, :height => 20, align: :center, rotate: 45 } },
+  :y_labels => { :offset => -40, :text_box_options => { :height => 40, valign: :center } }
+}

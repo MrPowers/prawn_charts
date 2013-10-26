@@ -6,13 +6,13 @@ module PrawnCharts
       @height = input.fetch(:height)
       @width = input.fetch(:width)
       @data = input.fetch(:data)
-      @y_labels_units = input.fetch(:y_labels, nil)
+      @y_labels_units = input.fetch(:y_labels)
       @scale = input.fetch(:scale, :linear)
     end
 
     def y_labels
       y_labels_units.inject([]) do |memo, label|
-        memo << { label: label.to_s, y: y_convert_to_pdf(label)}
+        memo << { label: label.to_s, y: y_convert_to_pdf(label) }
         memo
       end
     end
@@ -37,18 +37,23 @@ module PrawnCharts
     end
 
     def graph_points
-      data_points.select { |data_point| data_point.x_pdf && data_point.y_pdf }
+      data_points.select { |data_point| data_point.y_pdf }
+    end
+
+    def y_convert_to_pdf(n)
+      vertical_data_collector.convert_to_pdf(to_float(n))
     end
 
     private
 
+    def to_float(object)
+      return object.gsub(",", "").to_f if object.instance_of? String
+      object.to_f
+    end
+
     def vertical_data_collector
       return LinearVerticalDataCollector.new(height, y_labels_units) if scale == :linear
       LogVerticalDataCollector.new(height, y_labels_units)
-    end
-
-    def y_convert_to_pdf(n)
-      vertical_data_collector.convert_to_pdf(n)
     end
 
     # x methods

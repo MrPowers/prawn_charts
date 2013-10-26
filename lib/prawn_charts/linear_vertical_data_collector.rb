@@ -6,12 +6,18 @@ module PrawnCharts
       @y_labels_units = y_labels_units
     end
 
-    def total_y_units
-      y_labels_units.max - y_labels_units.min
+    def convert_to_pdf(n)
+      pdf_points_per_y_unit * n
     end
 
-    def convert_to_pdf(n)
-      height.to_f / total_y_units * n
+    private
+
+    def pdf_points_per_y_unit
+      height.to_f / total_y_units
+    end
+
+    def total_y_units
+      y_labels_units.max - y_labels_units.min
     end
   end
 end

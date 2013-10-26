@@ -119,7 +119,7 @@ module PrawnCharts
       @assistant = RendererAssistant.new(input)
       @collector = @assistant.collector
       @colors = colors
-      stroke_axis
+      #stroke_axis
       translate(*input[:graph][:starting_point]) do
         draw_rectangle_with_color
         fill_rectangle_with_color
