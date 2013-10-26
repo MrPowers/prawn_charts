@@ -1,5 +1,25 @@
 module PrawnCharts
   module PrawnChartRenderer
+
+    def draw_graph(input, colors = {})
+      @assistant = RendererAssistant.new(input)
+      @collector = @assistant.collector
+      @colors = colors
+      #stroke_axis
+      translate(*input[:graph][:starting_point]) do
+        draw_rectangle_with_color
+        fill_rectangle_with_color
+        draw_line_with_color
+        draw_dots_with_color
+        draw_x_labels_with_color
+        draw_y_labels_with_color
+        draw_horizontal_lines_with_color
+        draw_title_with_color
+        draw_x_title_with_color
+        draw_y_title_with_color
+      end
+    end
+
     def draw_line(graph_points)
       graph_points.each_index do |i|
         stroke_line(graph_points[i].coordinate, graph_points[i + 1].coordinate) unless graph_points[i + 1].nil?
@@ -115,23 +135,5 @@ module PrawnCharts
       end
     end
 
-    def draw_graph(input, colors = {})
-      @assistant = RendererAssistant.new(input)
-      @collector = @assistant.collector
-      @colors = colors
-      #stroke_axis
-      translate(*input[:graph][:starting_point]) do
-        draw_rectangle_with_color
-        fill_rectangle_with_color
-        draw_line_with_color
-        draw_dots_with_color
-        draw_x_labels_with_color
-        draw_y_labels_with_color
-        draw_horizontal_lines_with_color
-        draw_title_with_color
-        draw_x_title_with_color
-        draw_y_title_with_color
-      end
-    end
   end
 end

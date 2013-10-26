@@ -1,5 +1,6 @@
 require_relative "./../../prawn_charts"
 
+Prawn::Document.extensions << PrawnCharts::PrawnChartRenderer
 pdf = Prawn::Document.new
 
 data = [
@@ -51,4 +52,4 @@ input = {
 
 pdf.draw_graph(input, colors)
 
-pdf.render_file(Dir.home + "/desktop/simple_linear_prawn_graph.pdf")
+pdf.render_file(Dir.home + "/desktop/linear_prawn_graph.pdf")

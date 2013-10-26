@@ -1,5 +1,6 @@
 require_relative "./../../prawn_charts"
 
+Prawn::Document.extensions << PrawnCharts::PrawnChartRenderer
 pdf = Prawn::Document.new
 
 data = [
